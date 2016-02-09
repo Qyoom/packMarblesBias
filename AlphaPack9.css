@@ -1,0 +1,22 @@
+text {
+    font: bold 48px monospace;
+    fill: white;
+}
+
+.update {
+    fill: #333;
+}
+
+.enter {
+    fill: green;
+}
+
+.exit {
+    fill: brown;
+}
+
+.container {
+    fill: none;
+    stroke: black;
+    stroke-width: 1;
+}
