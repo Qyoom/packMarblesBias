@@ -108,10 +108,15 @@ data.children = objectify(26);
 update(data);
 
 setInterval(function() {
-    id = 0;
-    console.log("===>>>setInterval TOP, data.children: " + data.children);
+    //id = 0;
+    console.log("setInterval TOP, data.children: " + data.children);
 
-    var newChildren = _.sample(objectify(26), Math.floor(Math.random() * 26));
+    var sample = _.sample(data.children, 5);
+
+    console.log("--> setInterval, sample: " + sample);
+
+    //var newChildren = _.sample(objectify(26), Math.floor(Math.random() * 26));
+    var newChildren = objectify(26);
 
     data.children = newChildren;
     update(data);
