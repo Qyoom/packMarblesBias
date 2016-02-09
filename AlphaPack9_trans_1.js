@@ -108,16 +108,12 @@ data.children = objectify(26);
 update(data);
 
 setInterval(function() {
-    //id = 0;
-    console.log("setInterval TOP, data.children: " + data.children);
-
+    //console.log("setInterval TOP, data.children: " + data.children);
     var sample = _.sample(data.children, 5);
-
-    console.log("--> setInterval, sample: " + sample);
-
-    //var newChildren = _.sample(objectify(26), Math.floor(Math.random() * 26));
-    var newChildren = objectify(26);
-
-    data.children = newChildren;
+    //console.log("setInterval, sample: " + sample);
+    var newChildren = objectify(21);
+    //console.log("--> setInterval, newChildren: " + newChildren);
+    var sampleOldWithNew = sample.concat(newChildren);
+    data.children = _.shuffle(sampleOldWithNew);
     update(data);
 }, 1500);
