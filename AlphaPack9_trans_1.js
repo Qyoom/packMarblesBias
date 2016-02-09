@@ -110,9 +110,9 @@ update(data);
 setInterval(function() {
     id = 0;
     console.log("===>>>setInterval TOP, data.children: " + data.children);
-    var newChildren = _.sample(objectify(26), 5);
-        //.slice(0, Math.floor(Math.random() * 26))
-        //.sort();
+
+    var newChildren = _.sample(objectify(26), Math.floor(Math.random() * 26));
+
     data.children = newChildren;
     update(data);
 }, 1500);
