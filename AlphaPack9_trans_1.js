@@ -4,7 +4,7 @@ var data = {
     "children": []
 };
 
-var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+//var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
 
 var diameter = 600;
 
@@ -89,23 +89,30 @@ function update(data) {
         .style("fill-opacity", 1e-6);    
 }
 
-function objectify(alphArr) {
+var id = 0; // Starts at 1
+function getId() {
+    id = id + 1;
+    return id;
+}
+
+function objectify(size) {
     var objArr = [];
-    for(var i = 0; i < alphArr.length; i++) {
-        objArr.push({"id": alphArr[i], "value": 25});
+    for(var i = 0; i < size; i++) {
+        objArr.push({"id": getId(), "value": 25});
     }
     return objArr;
 }
 
-data.children = objectify(alphabet);
+data.children = objectify(26);
 
 update(data);
 
 setInterval(function() {
-    //console.log("===>>> data.children: " + data.children);
-    var newChildren = d3.shuffle(alphabet)
-        .slice(0, Math.floor(Math.random() * 26))
-        .sort();
-    data.children = objectify(newChildren);
+    id = 0;
+    console.log("===>>>setInterval TOP, data.children: " + data.children);
+    var newChildren = _.sample(objectify(26), 5);
+        //.slice(0, Math.floor(Math.random() * 26))
+        //.sort();
+    data.children = newChildren;
     update(data);
 }, 1500);
