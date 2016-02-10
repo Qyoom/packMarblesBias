@@ -1,5 +1,5 @@
 var data = {
-    "id": "charContainer",
+    "id": 0,
     "value": 100,
     "children": []
 };
@@ -36,7 +36,7 @@ function update(data) {
     // UPDATE
     node.selectAll("circle")
         .attr("class", function(d, i) {
-        var result = d.id === "charContainer" ? "container" : "update";
+        var result = d.id === 0 ? "container" : "update";
             return result;
     });
 
@@ -46,16 +46,10 @@ function update(data) {
         
     enterNode.append("circle")
         .attr("class", function(d, i) {
-            var result = d.id === "charContainer" ? "container" : "enter";
+            var result = d.id === 0 ? "container" : "enter";
             return result;
         })
-        .style("fill-opacity", 1e-6);
-     
-    // enterNode.append("text")
-    //     .attr("class", "text")
-    //     .attr("dx", -24)
-    //     .attr("dy", ".25em")
-    //     .text(function(d) { return d.id; });   
+        .style("fill-opacity", 1e-6);   
 
     // All
     node.transition().duration(750)
