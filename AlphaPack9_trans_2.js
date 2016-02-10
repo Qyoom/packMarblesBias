@@ -70,20 +70,12 @@ function update(data) {
         .style("fill-opacity", 1);
 
     // EXIT
-    //node.exit().selectAll("circle")
-        //.attr("class", "exit");
-
     node.exit().selectAll("circle")
       .transition()
         .duration(750)
         .style("fill-opacity", 1e-6)
         .attr("class", "exit")
-        .remove();
-
-    // node.exit()
-    //   .transition()
-    //     .duration(750)
-    //     .remove();   
+        .remove();   
 } // end update
 
 function updateType(t) {
