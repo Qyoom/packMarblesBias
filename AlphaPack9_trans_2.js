@@ -17,7 +17,7 @@ var svg = d3.select("#alphaPack").append("svg")
 
 var alphaBubble = d3.layout.pack()
     .size([diameter - 50, diameter - 50])
-    .padding(5);
+    .padding(8);
 
 function update(data) {
 
