@@ -38,9 +38,10 @@ function update(data) {
     // UPDATE
     node.selectAll("circle")
         .attr("class", function(d) {
-        var result = d.id === 0 ? "container" : updateType(d.type);
+            var result = d.id === 0 ? "container" : updateType(d.type);
             return result;
         });
+
 
     // ENTER
     var enterNode = node.enter().append("g")
@@ -54,14 +55,15 @@ function update(data) {
         .style("fill-opacity", 1e-6);   
 
     // All
-    node.transition().duration(750)
-        .attr("transform", function(d) {
-            return "translate(" + d.x + ", " + d.y + ")";
-        });
+    //node.transition().duration(750)
+    node.attr("transform", function(d) {
+        return "translate(" + d.x + ", " + d.y + ")";
+    });
         
     node.selectAll("circle")
       .transition()
         .duration(750)
+        .delay(500)
         .attr("r", function(d) {
             return d.r; 
         })
@@ -74,9 +76,7 @@ function update(data) {
     node.exit()
       .transition()
         .duration(750)
-        .attr("transform", function(d) {
-            return "translate(" + (+500) + ", " + (+500) + ")";
-        })
+        .style("fill-opacity", 1e-6)
         .remove();
 
     node.exit().selectAll("circle")
@@ -120,4 +120,4 @@ setInterval(function() {
     var sampleOldWithNew = sample.concat(newChildren);
     data.children = _.shuffle(sampleOldWithNew);
     update(data);
-}, 3000);
+}, 6000);
