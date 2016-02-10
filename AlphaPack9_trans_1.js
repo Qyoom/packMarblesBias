@@ -51,11 +51,11 @@ function update(data) {
         })
         .style("fill-opacity", 1e-6);
      
-    enterNode.append("text")
-        .attr("class", "text_16_2_5")
-        .attr("dx", -14)
-        .attr("dy", ".25em")
-        .text(function(d) { return d.id; });   
+    // enterNode.append("text")
+    //     .attr("class", "text")
+    //     .attr("dx", -24)
+    //     .attr("dy", ".25em")
+    //     .text(function(d) { return d.id; });   
 
     // All
     node.transition().duration(750)
@@ -103,15 +103,15 @@ function objectify(size) {
     return objArr;
 }
 
-data.children = objectify(26);
+data.children = objectify(1000);
 
 update(data);
 
 setInterval(function() {
     //console.log("setInterval TOP, data.children: " + data.children);
-    var sample = _.sample(data.children, 5);
+    var sample = _.sample(data.children, 200);
     //console.log("setInterval, sample: " + sample);
-    var newChildren = objectify(21);
+    var newChildren = objectify(800);
     //console.log("--> setInterval, newChildren: " + newChildren);
     var sampleOldWithNew = sample.concat(newChildren);
     data.children = _.shuffle(sampleOldWithNew);
