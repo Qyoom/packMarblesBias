@@ -54,11 +54,14 @@ function update(data) {
         })
         .style("fill-opacity", 1e-6);   
 
-    // All
-    //node.transition().duration(750)
-    node.attr("transform", function(d) {
-        return "translate(" + d.x + ", " + d.y + ")";
-    });
+    enterNode.attr("transform", function(d) {
+            return "translate(" + d.x + ", " + d.y + ")";
+        });
+
+    node.transition().delay(500).duration(750)
+        .attr("transform", function(d) {
+            return "translate(" + d.x + ", " + d.y + ")";
+        });
         
     node.selectAll("circle")
       .transition()
@@ -113,4 +116,4 @@ setInterval(function() {
     var sampleOldWithNew = sample.concat(newChildren);
     data.children = _.shuffle(sampleOldWithNew);
     update(data);
-}, 2000);
+}, 2250);
