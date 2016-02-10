@@ -3,6 +3,14 @@ text {
     fill: white;
 }
 
+.type1 {
+    fill: #3333ff;
+}
+
+.type2 {
+    fill: #e67300;
+}
+
 .update {
     fill: #333;
 }
