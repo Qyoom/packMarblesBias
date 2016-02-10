@@ -38,9 +38,11 @@ function update(data) {
     // UPDATE
     node.selectAll("circle")
         .attr("class", function(d, i) {
-        var result = d.id === 0 ? "container" : "update";
+        var result = d.id === 0 ? "container" : d.type;
             return result;
-    });
+        })
+        .style("stroke", "black")
+        .style("stroke-width", 1);
 
     // ENTER
     var enterNode = node.enter().append("g")
@@ -116,4 +118,4 @@ setInterval(function() {
     var sampleOldWithNew = sample.concat(newChildren);
     data.children = _.shuffle(sampleOldWithNew);
     update(data);
-}, 1500);
+}, 3000);

@@ -12,7 +12,8 @@ text {
 }
 
 .update {
-    fill: #333;
+    stroke: black;
+    stroke-width: 1;
 }
 
 .enter {
