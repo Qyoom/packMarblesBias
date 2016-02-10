@@ -4,7 +4,9 @@ var data = {
     "children": []
 };
 
-//var alphabet = "abcdefghijklmnopqrstuvwxyz".split("");
+var sampleSize = 200;
+var maxPopulation = 1000;
+var halfPop = d3.round(maxPopulation / 2, 0);
 
 var diameter = 600;
 
@@ -45,8 +47,8 @@ function update(data) {
         .attr("class", "node");
         
     enterNode.append("circle")
-        .attr("class", function(d, i) {
-            var result = d.id === 0 ? "container" : "enter";
+        .attr("class", function(d) {
+            var result = d.id === 0 ? "container" : d.type;
             return result;
         })
         .style("fill-opacity", 1e-6);   
@@ -101,7 +103,7 @@ function reproduce(type1Size, type2Size) {
     return objArr;
 }
 
-data.children = reproduce(1000);
+data.children = _.shuffle(reproduce(halfPop, halfPop));
 
 update(data);
 
