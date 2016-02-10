@@ -37,12 +37,10 @@ function update(data) {
 
     // UPDATE
     node.selectAll("circle")
-        .attr("class", function(d, i) {
-        var result = d.id === 0 ? "container" : d.type;
+        .attr("class", function(d) {
+        var result = d.id === 0 ? "container" : updateType(d.type);
             return result;
-        })
-        .style("stroke", "black")
-        .style("stroke-width", 1);
+        });
 
     // ENTER
     var enterNode = node.enter().append("g")
@@ -85,6 +83,10 @@ function update(data) {
       .transition()
         .duration(750)
         .style("fill-opacity", 1e-6);    
+} // end update
+
+function updateType(t) {
+    return t == "type1" ? "type1_update" : "type2_update"
 }
 
 var id = 0; // Starts at 1

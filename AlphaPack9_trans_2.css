@@ -11,9 +11,16 @@ text {
     fill: #e67300;
 }
 
-.update {
-    stroke: black;
-    stroke-width: 1;
+.type1_update {
+    fill: #3333ff;
+    stroke: #3333ff;
+    stroke-width: 2;
+}
+
+.type2_update {
+    fill: #e67300;
+    stroke: #e67300;
+    stroke-width: 2;
 }
 
 .enter {
