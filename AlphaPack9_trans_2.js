@@ -70,19 +70,20 @@ function update(data) {
         .style("fill-opacity", 1);
 
     // EXIT
-    node.exit().selectAll("circle")
-        .attr("class", "exit");
-      
-    node.exit()
-      .transition()
-        .duration(750)
-        .style("fill-opacity", 1e-6)
-        .remove();
+    //node.exit().selectAll("circle")
+        //.attr("class", "exit");
 
     node.exit().selectAll("circle")
       .transition()
         .duration(750)
-        .style("fill-opacity", 1e-6);    
+        .style("fill-opacity", 1e-6)
+        .attr("class", "exit")
+        .remove();
+
+    // node.exit()
+    //   .transition()
+    //     .duration(750)
+    //     .remove();   
 } // end update
 
 function updateType(t) {
@@ -120,4 +121,4 @@ setInterval(function() {
     var sampleOldWithNew = sample.concat(newChildren);
     data.children = _.shuffle(sampleOldWithNew);
     update(data);
-}, 6000);
+}, 2000);
