@@ -42,7 +42,6 @@ function update(data) {
             return result;
         });
 
-
     // ENTER
     var enterNode = node.enter().append("g")
         .attr("class", "node");
@@ -52,13 +51,13 @@ function update(data) {
             var result = d.id === 0 ? "container" : d.type;
             return result;
         })
-        .style("fill-opacity", 1e-6);   
+        .style("fill-opacity", 1e-6);  
 
     enterNode.attr("transform", function(d) {
-            return "translate(" + d.x + ", " + d.y + ")";
-        });
+        return "translate(" + d.x + ", " + d.y + ")";
+    });
 
-    node.transition().delay(500).duration(750)
+    node.transition().delay(1000).duration(750)
         .attr("transform", function(d) {
             return "translate(" + d.x + ", " + d.y + ")";
         });
@@ -77,8 +76,10 @@ function update(data) {
       .transition()
         .duration(750)
         .style("fill-opacity", 1e-6)
-        .attr("class", "exit")
-        .remove();   
+        .attr("class", function(d) {
+            return d.type == "type1" ? "type1_update" : "type2_update"
+        })
+        .remove();
 } // end update
 
 function updateType(t) {
@@ -101,9 +102,11 @@ function reproduce(type1Size, type2Size) {
         objArr.push({"id": getId(), "type": "type2", "value": 25});
     }
     return objArr;
+    return _.shuffle(objArr);
 }
 
 data.children = _.shuffle(reproduce(halfPop, halfPop));
+//data.children = reproduce(halfPop, halfPop);
 
 update(data);
 
@@ -115,5 +118,6 @@ setInterval(function() {
     //console.log("--> setInterval, newChildren: " + newChildren);
     var sampleOldWithNew = sample.concat(newChildren);
     data.children = _.shuffle(sampleOldWithNew);
+    //data.children = sampleOldWithNew;
     update(data);
-}, 2250);
+}, 2000);
