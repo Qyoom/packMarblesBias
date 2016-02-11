@@ -1,0 +1,34 @@
+text {
+    font: bold 14px monospace;
+    fill: white;
+}
+
+.type1 {
+    fill: #3333ff;
+}
+
+.type2 {
+    fill: #e67300;
+}
+
+.type1_update {
+    fill: #3333ff;
+}
+
+.type2_update {
+    fill: #e67300;
+}
+
+.enter {
+    fill: green;
+}
+
+.exit {
+    fill: brown;
+}
+
+.container {
+    fill: none;
+    stroke: black;
+    stroke-width: 1;
+}
