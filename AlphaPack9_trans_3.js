@@ -69,7 +69,7 @@ function ratio(marbles) {
 }
 
 function popConvergence(ratio) {
-    return ((ratio[0] === 1.0) || (ratio[1] === 1.0));
+    return ((ratio[0] === 0) || (ratio[1] === 0));
 }
 
 function updateType(t) {
@@ -176,13 +176,14 @@ function update(data) {
 
 /** RUN ********/
 
-var bias = [.56, .44]; // TODO: source UI parameter
+var reproSize = maxPopulation - sampleSize;
+var bias = [.34, .66]; // TODO: source UI parameter
 
 data.children = _.shuffle(reproduce([.5, .5], [.5, .5], sampleSize, maxPopulation));
 console.log("===>> data.children.length: " + data.children.length);
 update(data);
 
-setInterval(function() {
+var timer = setInterval(function() {
     //console.log("===>> data.children: " + data.children);
     var sampleIndex = randomIntArray(sampleSize, 1, maxPopulation);
 
@@ -190,16 +191,21 @@ setInterval(function() {
         return _.contains(sampleIndex, i); 
     }) // TODO: use [fromIndex]
 
+    var convergence = false;
     var sampleRatio = ratio(sample);
+    if(popConvergence(sampleRatio)) {
+        if(popConvergence(ratio(data.children))) {
+            clearInterval(timer);
+            convergence = true;
+        }
+    }
 
-    var size = maxPopulation - sampleSize;
+    if(!convergence) {
+        var newChildren = reproduce(sampleRatio, bias, sampleSize, reproSize);
+        //console.log("--> setInterval, newChildren.length: " + newChildren.length);
+        var sampleOldWithNew = sample.concat(newChildren);
+        data.children = _.shuffle(sampleOldWithNew);
 
-    var newChildren = reproduce(sampleRatio, bias, sampleSize, maxPopulation);
-    //console.log("--> setInterval, newChildren.length: " + newChildren.length);
-
-    var sampleOldWithNew = sample.concat(newChildren);
-
-    data.children = _.shuffle(sampleOldWithNew);
-
-    update(data);
+        update(data);
+    }
 }, 2500);
