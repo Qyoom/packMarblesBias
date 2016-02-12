@@ -8,7 +8,7 @@ var svg = d3.select("#alphaPack").append("svg")
     .append("g");
 
 var alphaBubble = d3.layout.pack()
-    .size([diameter - 50, diameter - 50])
+    .size([diameter, diameter])
     .padding(8);
 
 /** Model ****************/
@@ -177,9 +177,17 @@ var bias = [.34, .66]; // TODO: source UI parameter
 
 data.children = _.shuffle(reproduce([.5, .5], [.5, .5], sampleSize, maxPopulation));
 console.log("===>> data.children.length: " + data.children.length);
+
 update(data);
 
+var ratioField = d3.select("#ratio")
+    .append("text")
+
 var timer = setInterval(function() {
+    var popRatio = ratio(data.children);
+
+    ratioField.text("Marble color ratio: " + popRatio[0] + " / " + popRatio[1]);
+
     var sampleIndex = randomIntArray(sampleSize, 1, maxPopulation);
 
     var sample = data.children.filter(function(d, i) { 
@@ -187,15 +195,13 @@ var timer = setInterval(function() {
     }) // TODO: use [fromIndex]
 
     var convergence = false;
-    var sampleRatio = ratio(sample);
-    if(popConvergence(sampleRatio)) {
-        if(popConvergence(ratio(data.children))) {
-            clearInterval(timer);
-            convergence = true;
-        }
+    if(popConvergence(popRatio)) {
+        clearInterval(timer);
+        convergence = true;
     }
 
     if(!convergence) {
+        var sampleRatio = ratio(sample);
         var newChildren = reproduce(sampleRatio, bias, sampleSize, reproSize);
         var sampleOldWithNew = sample.concat(newChildren);
         data.children = _.shuffle(sampleOldWithNew);
