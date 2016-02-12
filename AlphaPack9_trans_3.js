@@ -23,15 +23,18 @@ var sampleSize = 200;
 var maxPopulation = 1000;
 var halfPop = d3.round(maxPopulation / 2, 0);
 
-function reproduce(ratio) {
+function reproduce(ratio, bias, size) {
     var objArr = [];
-    for(var i = 0; i < ratio[0]; i++) {
-        objArr.push({"id": getId(), "type": "type1", "value": 25});
+    while(objArr.length < size) {
+        //console.log("objArr.length" + objArr.length);
+        var type;
+        if(Math.random() < ratio[0] && Math.random() < bias[0]) {
+            type = "type1";
+        } else {
+            type = "type2";
+        }
+        objArr.push({"id": getId(), "type": type, "value": 25});
     }
-    for(var i = 0; i < ratio[1]; i++) {
-        objArr.push({"id": getId(), "type": "type2", "value": 25});
-    }
-    return objArr;
     return _.shuffle(objArr);
 }
 
@@ -152,19 +155,31 @@ function update(data) {
 
 /** RUN ********/
 
-data.children = _.shuffle(reproduce([halfPop, halfPop]));
+var bias = [.8, .2]; // TODO: source UI parameter
+
+data.children = _.shuffle(reproduce([.5, .5], [.5, .5], maxPopulation));
 
 update(data);
 
 setInterval(function() {
-    //console.log("setInterval TOP, data.children: " + data.children);
-    var sample = _.sample(data.children, 200);
-    var rat = ratio(sample);
-    //console.log("setInterval, sample: " + sample);
-    var newChildren = reproduce([rat[0]*maxPopulation, rat[1]*maxPopulation]);
+    //console.log("===>> data.children: " + data.children);
+    //var sample = _.sample(data.children, 200);
+    var sampleIndex = randomIntArray(sampleSize, 1, maxPopulation);
+
+    var sample = data.children.filter(function(d, i) { 
+        return _.contains(sampleIndex, i); 
+    }) // TODO: use [fromIndex]
+
+    var sampleRatio = ratio(sample);
+
+    var size = maxPopulation - sampleSize;
+
+    var newChildren = reproduce(sampleRatio, bias, size);
     console.log("--> setInterval, newChildren.length: " + newChildren.length);
+
     var sampleOldWithNew = sample.concat(newChildren);
+
     data.children = _.shuffle(sampleOldWithNew);
-    //data.children = sampleOldWithNew;
+
     update(data);
 }, 2000);
