@@ -111,8 +111,7 @@ data.children = _.shuffle(reproduce(halfPop, halfPop));
 update(data);
 
 setInterval(function() {
-    console.log("setInterval TOP, data.children: " + data.children);
-    
+    //console.log("setInterval TOP, data.children: " + data.children);
     var sample = _.sample(data.children, 200);
     //console.log("setInterval, sample: " + sample);
     var newChildren = reproduce(400, 400);

@@ -23,19 +23,40 @@ var sampleSize = 200;
 var maxPopulation = 1000;
 var halfPop = d3.round(maxPopulation / 2, 0);
 
-function reproduce(ratio, bias, size) {
+var type1 = "type1";
+var type2 = "type2";
+
+function reproduce(sampleRatio, bias, sampleSize, popSize) {
+    var type1Bias = bias[0];
+    var type2Bias = bias[1];
+
+    var percentType1 = sampleRatio[0] * sampleSize;
+    var sampleType1 = percentType1 * sampleSize;
+
+    var percentType2 = sampleRatio[1] * sampleSize;
+    var sampleType2 = percentType2 * sampleSize;
+
+    var applied = (type1Bias * sampleType1) + (type2Bias * sampleType2);
+    var replicationFactor = popSize / applied;
+
+    var numType1 = Math.round(replicationFactor * type1Bias * sampleType1);
+    var numType2 = Math.round(replicationFactor * type2Bias * sampleType2);
+
+    console.log("numType1: " + numType1);
+    console.log("numType2: " + numType2);
+
+    var newType1 = marbles(type1, numType1);
+    var newType2 = marbles(type2, numType2);
+
+    return(newType1.concat(newType2));
+}
+
+function marbles(type, qty) {
     var objArr = [];
-    while(objArr.length < size) {
-        //console.log("objArr.length" + objArr.length);
-        var type;
-        if(Math.random() < ratio[0] && Math.random() < bias[0]) {
-            type = "type1";
-        } else {
-            type = "type2";
-        }
-        objArr.push({"id": getId(), "type": type, "value": 25});
+    for(var i = 0; i < qty; i++) {
+         objArr.push({"id": getId(), "type": type, "value": 25});
     }
-    return _.shuffle(objArr);
+    return objArr;
 }
 
 function ratio(marbles) {
@@ -128,14 +149,14 @@ function update(data) {
         return "translate(" + d.x + ", " + d.y + ")";
     });
 
-    node.transition().delay(1000).duration(750)
+    node.transition().delay(1000).duration(1000)
         .attr("transform", function(d) {
             return "translate(" + d.x + ", " + d.y + ")";
         });
         
     node.selectAll("circle")
       .transition()
-        .duration(750)
+        .duration(1000)
         .delay(500)
         .attr("r", function(d) {
             return d.r; 
@@ -145,7 +166,7 @@ function update(data) {
     // EXIT
     node.exit().selectAll("circle")
       .transition()
-        .duration(750)
+        .duration(1000)
         .style("fill-opacity", 1e-6)
         .attr("class", function(d) {
             return d.type == "type1" ? "type1_update" : "type2_update"
@@ -155,15 +176,14 @@ function update(data) {
 
 /** RUN ********/
 
-var bias = [.8, .2]; // TODO: source UI parameter
+var bias = [.56, .44]; // TODO: source UI parameter
 
-data.children = _.shuffle(reproduce([.5, .5], [.5, .5], maxPopulation));
-
+data.children = _.shuffle(reproduce([.5, .5], [.5, .5], sampleSize, maxPopulation));
+console.log("===>> data.children.length: " + data.children.length);
 update(data);
 
 setInterval(function() {
     //console.log("===>> data.children: " + data.children);
-    //var sample = _.sample(data.children, 200);
     var sampleIndex = randomIntArray(sampleSize, 1, maxPopulation);
 
     var sample = data.children.filter(function(d, i) { 
@@ -174,12 +194,12 @@ setInterval(function() {
 
     var size = maxPopulation - sampleSize;
 
-    var newChildren = reproduce(sampleRatio, bias, size);
-    console.log("--> setInterval, newChildren.length: " + newChildren.length);
+    var newChildren = reproduce(sampleRatio, bias, sampleSize, maxPopulation);
+    //console.log("--> setInterval, newChildren.length: " + newChildren.length);
 
     var sampleOldWithNew = sample.concat(newChildren);
 
     data.children = _.shuffle(sampleOldWithNew);
 
     update(data);
-}, 2000);
+}, 2500);
