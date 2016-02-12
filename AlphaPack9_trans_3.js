@@ -93,19 +93,39 @@ function getId() {
     return id;
 }
  
-function reproduce(type1Size, type2Size) {
+function reproduce(ratio) {
     var objArr = [];
-    for(var i = 0; i < type1Size; i++) {
+    for(var i = 0; i < ratio[0]; i++) {
         objArr.push({"id": getId(), "type": "type1", "value": 25});
     }
-    for(var i = 0; i < type2Size; i++) {
+    for(var i = 0; i < ratio[1]; i++) {
         objArr.push({"id": getId(), "type": "type2", "value": 25});
     }
     return objArr;
     return _.shuffle(objArr);
 }
 
-data.children = _.shuffle(reproduce(halfPop, halfPop));
+function ratio(marbles) {
+    var greens = marbles.filter( function(m) {return m.type === 'type1'} );
+    var ratioGreen = greens.length / marbles.length;
+    var ratioOrange = 1 - ratioGreen;
+    var rat = [round(ratioGreen), round(ratioOrange)];
+    console.log("ratioGreen: " + rat[0] + " ratioOrange: " + rat[1]);
+    return rat;
+}
+
+function popConvergence(ratio) {
+    return ((ratio[0] === 1.0) || (ratio[1] === 1.0));
+}
+
+// Util
+function round(value) {
+    return Number(Math.round(value+'e'+2)+'e-'+2);
+}
+
+/** RUN ********/
+
+data.children = _.shuffle(reproduce([halfPop, halfPop]));
 //data.children = reproduce(halfPop, halfPop);
 
 update(data);
@@ -113,9 +133,10 @@ update(data);
 setInterval(function() {
     //console.log("setInterval TOP, data.children: " + data.children);
     var sample = _.sample(data.children, 200);
+    var rat = ratio(sample);
     //console.log("setInterval, sample: " + sample);
-    var newChildren = reproduce(400, 400);
-    //console.log("--> setInterval, newChildren: " + newChildren);
+    var newChildren = reproduce([rat[0]*maxPopulation, rat[1]*maxPopulation]);
+    console.log("--> setInterval, newChildren.length: " + newChildren.length);
     var sampleOldWithNew = sample.concat(newChildren);
     data.children = _.shuffle(sampleOldWithNew);
     //data.children = sampleOldWithNew;
