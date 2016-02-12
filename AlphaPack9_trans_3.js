@@ -42,9 +42,6 @@ function reproduce(sampleRatio, bias, sampleSize, popSize) {
     var numType1 = Math.round(replicationFactor * type1Bias * sampleType1);
     var numType2 = Math.round(replicationFactor * type2Bias * sampleType2);
 
-    console.log("numType1: " + numType1);
-    console.log("numType2: " + numType2);
-
     var newType1 = marbles(type1, numType1);
     var newType2 = marbles(type2, numType2);
 
@@ -64,7 +61,6 @@ function ratio(marbles) {
     var ratioGreen = greens.length / marbles.length;
     var ratioOrange = 1 - ratioGreen;
     var rat = [round(ratioGreen), round(ratioOrange)];
-    console.log("ratioGreen: " + rat[0] + " ratioOrange: " + rat[1]);
     return rat;
 }
 
@@ -184,7 +180,6 @@ console.log("===>> data.children.length: " + data.children.length);
 update(data);
 
 var timer = setInterval(function() {
-    //console.log("===>> data.children: " + data.children);
     var sampleIndex = randomIntArray(sampleSize, 1, maxPopulation);
 
     var sample = data.children.filter(function(d, i) { 
@@ -202,7 +197,6 @@ var timer = setInterval(function() {
 
     if(!convergence) {
         var newChildren = reproduce(sampleRatio, bias, sampleSize, reproSize);
-        //console.log("--> setInterval, newChildren.length: " + newChildren.length);
         var sampleOldWithNew = sample.concat(newChildren);
         data.children = _.shuffle(sampleOldWithNew);
 
