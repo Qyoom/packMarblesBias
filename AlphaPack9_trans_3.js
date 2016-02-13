@@ -180,9 +180,17 @@ function update(data) {
 var ratioField = d3.select("#ratio")
     .append("text");
 
-d3.select('button').on('click', function() {
-    console.log("CLICK");
-    d3.select('button').remove();
+// var startButton = d3.select('button').on('click', function() {
+//     console.log("CLICK");
+//     d3.select('button').remove();
+//     start();
+// });
+
+var startBtn = $('<input id="start", type="button" value="Start"/>');
+$("#control").append(startBtn);
+$("#start").on('click',function(){
+    console.log("<1>CLICK");
+    $(this).remove();
     start();
 });
 
@@ -194,7 +202,7 @@ function start() {
     //id = 0;
 
     var reproSize = maxPopulation - sampleSize;
-    var bias = [.34, .66]; // TODO: source UI parameter
+    var bias = [.14, .86]; // TODO: source UI parameter
 
     data.children = _.shuffle(reproduce([.5, .5], [.5, .5], sampleSize, maxPopulation));
     //console.log("===>> data.children.length: " + data.children.length);
@@ -225,6 +233,15 @@ function start() {
             data.children = _.shuffle(sampleOldWithNew);
 
             update(data);
+        }
+        else {
+            console.log("convergence");
+            $("#control").append(startBtn);
+            $("#start").on('click',function(){
+                console.log("<1>CLICK");
+                $(this).remove();
+                start();
+            });
         }
     }, 2500);
 } // end start

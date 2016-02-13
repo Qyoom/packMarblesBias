@@ -31,3 +31,11 @@
     stroke: black;
     stroke-width: 1;
 }
+
+.start {
+    display: block;
+    height: 100px;
+    width: 300px;
+    background: #34696f;
+    border: 2px solid rgba(33, 68, 72, 0.59);
+}
