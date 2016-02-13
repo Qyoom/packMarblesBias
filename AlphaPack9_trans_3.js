@@ -72,6 +72,10 @@ function updateType(t) {
     return t == "type1" ? "type1_update" : "type2_update"
 }
 
+function submitRatio(form) {
+    alert("CLICKED!");
+}
+
 /** Util ****************/
 
 function round(value) {
@@ -80,6 +84,7 @@ function round(value) {
 
 var id = 0; // Starts at 1
 function getId() {
+    if(id == 1) console.log("===>> getId: " + id);
     id = id + 1;
     if(id % 10000 == 0) { console.log("getId: " + id); }
     return id;
@@ -172,40 +177,57 @@ function update(data) {
 
 /** RUN ********/
 
-var reproSize = maxPopulation - sampleSize;
-var bias = [.34, .66]; // TODO: source UI parameter
-
-data.children = _.shuffle(reproduce([.5, .5], [.5, .5], sampleSize, maxPopulation));
-console.log("===>> data.children.length: " + data.children.length);
-
-update(data);
-
 var ratioField = d3.select("#ratio")
-    .append("text")
+    .append("text");
 
-var timer = setInterval(function() {
-    var popRatio = ratio(data.children);
+d3.select('button').on('click', function() {
+    console.log("CLICK");
+    d3.select('button').remove();
+    start();
+});
 
-    ratioField.text("Marble color ratio: " + popRatio[0] + " / " + popRatio[1]);
+function start() {
 
-    var sampleIndex = randomIntArray(sampleSize, 1, maxPopulation);
+    var timer;
 
-    var sample = data.children.filter(function(d, i) { 
-        return _.contains(sampleIndex, i); 
-    }) // TODO: use [fromIndex]
+    clearInterval(timer); // In case it is running.
+    //id = 0;
 
-    var convergence = false;
-    if(popConvergence(popRatio)) {
-        clearInterval(timer);
-        convergence = true;
-    }
+    var reproSize = maxPopulation - sampleSize;
+    var bias = [.34, .66]; // TODO: source UI parameter
 
-    if(!convergence) {
-        var sampleRatio = ratio(sample);
-        var newChildren = reproduce(sampleRatio, bias, sampleSize, reproSize);
-        var sampleOldWithNew = sample.concat(newChildren);
-        data.children = _.shuffle(sampleOldWithNew);
+    data.children = _.shuffle(reproduce([.5, .5], [.5, .5], sampleSize, maxPopulation));
+    //console.log("===>> data.children.length: " + data.children.length);
 
-        update(data);
-    }
-}, 2500);
+    update(data);
+
+    timer = setInterval(function() {
+        var popRatio = ratio(data.children);
+
+        ratioField.text("Marble color ratio: " + popRatio[0] + " / " + popRatio[1]);
+
+        var sampleIndex = randomIntArray(sampleSize, 1, maxPopulation);
+
+        var sample = data.children.filter(function(d, i) { 
+            return _.contains(sampleIndex, i); 
+        }) // TODO: use [fromIndex]
+
+        var convergence = false;
+        if(popConvergence(popRatio)) {
+            clearInterval(timer);
+            convergence = true;
+        }
+
+        if(!convergence) {
+            var sampleRatio = ratio(sample);
+            var newChildren = reproduce(sampleRatio, bias, sampleSize, reproSize);
+            var sampleOldWithNew = sample.concat(newChildren);
+            data.children = _.shuffle(sampleOldWithNew);
+
+            update(data);
+        }
+    }, 2500);
+} // end start
+
+
+
