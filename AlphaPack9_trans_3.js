@@ -60,7 +60,7 @@ function ratio(marbles) {
     var greens = marbles.filter( function(m) {return m.type === 'type1'} );
     var ratioGreen = greens.length / marbles.length;
     var ratioOrange = 1 - ratioGreen;
-    var rat = [round(ratioGreen), round(ratioOrange)];
+    var rat = [ratioGreen, ratioOrange];
     return rat;
 }
 
@@ -202,7 +202,7 @@ function start() {
     //id = 0;
 
     var reproSize = maxPopulation - sampleSize;
-    var bias = [.14, .86]; // TODO: source UI parameter
+    var bias = [.34, .66]; // TODO: source UI parameter
 
     data.children = _.shuffle(reproduce([.5, .5], [.5, .5], sampleSize, maxPopulation));
     //console.log("===>> data.children.length: " + data.children.length);
@@ -212,7 +212,7 @@ function start() {
     timer = setInterval(function() {
         var popRatio = ratio(data.children);
 
-        ratioField.text("Marble color ratio: " + popRatio[0] + " / " + popRatio[1]);
+        ratioField.text("Marble color ratio: " + round(popRatio[0]) + " / " + round(popRatio[1]));
 
         var sampleIndex = randomIntArray(sampleSize, 1, maxPopulation);
 
